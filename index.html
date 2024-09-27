@@ -336,11 +336,11 @@
             delayedFetch(Math.random() * 1000 + 1000, fetchFunction); // Delay between 1-2 seconds
         }
 
-        // Functions with CORS proxy applied
+        // Functions with your proxy address
         function checkPlexStatus() {
-            fetch('https://cors-anywhere.herokuapp.com/http://plemby.ddns.net:32400/web', { mode: 'cors' })
+            fetch('http://plemby.ddns.net:8080/proxy?url=http://plemby.ddns.net:32400/web', { mode: 'cors' })
                 .then(response => {
-                    setStatus('plex', response.type === 'opaque');
+                    setStatus('plex', response.ok); // If the request succeeds, it's up
                 })
                 .catch(() => {
                     setStatus('plex', false);
@@ -348,9 +348,9 @@
         }
 
         function checkSonarrStatus() {
-            fetch('https://cors-anywhere.herokuapp.com/http://plemby.ddns.net:8989', { mode: 'cors' })
+            fetch('http://plemby.ddns.net:8080/proxy?url=http://plemby.ddns.net:8989', { mode: 'cors' })
                 .then(response => {
-                    setStatus('sonarr', response.type === 'opaque');
+                    setStatus('sonarr', response.ok);
                 })
                 .catch(() => {
                     setStatus('sonarr', false);
@@ -358,9 +358,9 @@
         }
 
         function checkProwlarrStatus() {
-            fetch('https://cors-anywhere.herokuapp.com/http://plemby.ddns.net:9696', { mode: 'cors' })
+            fetch('http://plemby.ddns.net:8080/proxy?url=http://plemby.ddns.net:9696', { mode: 'cors' })
                 .then(response => {
-                    setStatus('prowlarr', response.type === 'opaque');
+                    setStatus('prowlarr', response.ok);
                 })
                 .catch(() => {
                     setStatus('prowlarr', false);
@@ -368,9 +368,9 @@
         }
 
         function checkQbittorrentStatus() {
-            fetch('https://cors-anywhere.herokuapp.com/http://plemby.ddns.net:8900', { mode: 'cors' })
+            fetch('http://plemby.ddns.net:8080/proxy?url=http://plemby.ddns.net:8900', { mode: 'cors' })
                 .then(response => {
-                    setStatus('qbittorrent', response.type === 'opaque');
+                    setStatus('qbittorrent', response.ok);
                 })
                 .catch(() => {
                     setStatus('qbittorrent', false);
@@ -378,9 +378,9 @@
         }
 
         function checkEmbyStatus() {
-            fetch('https://cors-anywhere.herokuapp.com/http://emby.pandaserver.org/', { mode: 'cors' })
+            fetch('http://plemby.ddns.net:8080/proxy?url=http://emby.pandaserver.org/', { mode: 'cors' })
                 .then(response => {
-                    setStatus('emby', response.type === 'opaque');
+                    setStatus('emby', response.ok);
                 })
                 .catch(() => {
                     setStatus('emby', false);
