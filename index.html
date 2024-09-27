@@ -322,27 +322,20 @@
             const element = document.getElementById(`${service}-status`);
             element.className = status ? 'status-indicator status-up' : 'status-indicator status-down';
             element.innerHTML = '';
-            if (status) element.innerHTML = '✓'; // Add checkmark if status is up
+            if (status) {
+                element.innerHTML = '✓'; // Add checkmark if status is up
+            }
         }
 
-        function delayedFetch(delay, fetchFunction) {
-            setTimeout(fetchFunction, delay);
-        }
-
-        function recheckStatus(service, fetchFunction) {
-            const element = document.getElementById(`${service}-status`);
-            element.innerHTML = '';
-            element.className = 'spinner';
-            delayedFetch(Math.random() * 1000 + 1000, fetchFunction); // Delay between 1-2 seconds
-        }
-
-        // Functions with your proxy address using the plemby.ddns.net and port 8080
+        // Functions with logging to check the HTTP status codes
         function checkPlexStatus() {
             fetch('http://plemby.ddns.net:8080/proxy?url=http://plemby.ddns.net:32400/web', { mode: 'cors' })
                 .then(response => {
-                    setStatus('plex', response.ok); // If the request succeeds, it's up
+                    console.log(`Plex HTTP Status: ${response.status}`);  // Log HTTP status
+                    setStatus('plex', response.status >= 200 && response.status < 300); // Mark "up" only for 2xx codes
                 })
-                .catch(() => {
+                .catch(error => {
+                    console.error(`Error checking Plex: ${error}`);
                     setStatus('plex', false);
                 });
         }
@@ -350,9 +343,11 @@
         function checkSonarrStatus() {
             fetch('http://plemby.ddns.net:8080/proxy?url=http://plemby.ddns.net:8989', { mode: 'cors' })
                 .then(response => {
-                    setStatus('sonarr', response.ok);
+                    console.log(`Sonarr HTTP Status: ${response.status}`);  // Log HTTP status
+                    setStatus('sonarr', response.status >= 200 && response.status < 300);
                 })
-                .catch(() => {
+                .catch(error => {
+                    console.error(`Error checking Sonarr: ${error}`);
                     setStatus('sonarr', false);
                 });
         }
@@ -360,9 +355,11 @@
         function checkProwlarrStatus() {
             fetch('http://plemby.ddns.net:8080/proxy?url=http://plemby.ddns.net:9696', { mode: 'cors' })
                 .then(response => {
-                    setStatus('prowlarr', response.ok);
+                    console.log(`Prowlarr HTTP Status: ${response.status}`);  // Log HTTP status
+                    setStatus('prowlarr', response.status >= 200 && response.status < 300);
                 })
-                .catch(() => {
+                .catch(error => {
+                    console.error(`Error checking Prowlarr: ${error}`);
                     setStatus('prowlarr', false);
                 });
         }
@@ -370,9 +367,11 @@
         function checkQbittorrentStatus() {
             fetch('http://plemby.ddns.net:8080/proxy?url=http://plemby.ddns.net:8900', { mode: 'cors' })
                 .then(response => {
-                    setStatus('qbittorrent', response.ok);
+                    console.log(`qBittorrent HTTP Status: ${response.status}`);  // Log HTTP status
+                    setStatus('qbittorrent', response.status >= 200 && response.status < 300);
                 })
-                .catch(() => {
+                .catch(error => {
+                    console.error(`Error checking qBittorrent: ${error}`);
                     setStatus('qbittorrent', false);
                 });
         }
@@ -380,13 +379,16 @@
         function checkEmbyStatus() {
             fetch('http://plemby.ddns.net:8080/proxy?url=http://emby.pandaserver.org/', { mode: 'cors' })
                 .then(response => {
-                    setStatus('emby', response.ok);
+                    console.log(`Emby HTTP Status: ${response.status}`);  // Log HTTP status
+                    setStatus('emby', response.status >= 200 && response.status < 300);
                 })
-                .catch(() => {
+                .catch(error => {
+                    console.error(`Error checking Emby: ${error}`);
                     setStatus('emby', false);
                 });
         }
 
+        // Add event listeners to refresh status on click
         document.getElementById('sonarr-button').addEventListener('click', () => recheckStatus('sonarr', checkSonarrStatus));
         document.getElementById('prowlarr-button').addEventListener('click', () => recheckStatus('prowlarr', checkProwlarrStatus));
         document.getElementById('qbittorrent-button').addEventListener('click', () => recheckStatus('qbittorrent', checkQbittorrentStatus));
