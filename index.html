@@ -37,6 +37,20 @@
             border-radius: 50%;
             background-color: gray;
         }
+
+        .loading {
+            border: 2px solid #f3f3f3; /* Light grey */
+            border-top: 2px solid #3498db; /* Blue */
+            border-radius: 50%;
+            width: 15px;
+            height: 15px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
@@ -74,6 +88,10 @@
 
         // Function to update service status
         function updateStatus(serviceName, url, statusElementId) {
+            // Set the status element to show loading spinner while fetching
+            const statusElement = document.getElementById(statusElementId);
+            statusElement.classList.add('loading');
+
             // Perform a fetch request with Basic Authentication
             fetch(url, {
                 method: 'GET',
@@ -82,7 +100,8 @@
                 }
             })
             .then(response => {
-                const statusElement = document.getElementById(statusElementId);
+                // Remove loading spinner after fetch completes
+                statusElement.classList.remove('loading');
                 if (response.ok) {
                     // If service is up, show green
                     statusElement.style.backgroundColor = 'green';
@@ -93,8 +112,8 @@
             })
             .catch(error => {
                 console.error(`Error checking ${serviceName} status:`, error);
-                const statusElement = document.getElementById(statusElementId);
-                // In case of any error, show red (service down)
+                // Remove loading spinner and set the indicator to red in case of error
+                statusElement.classList.remove('loading');
                 statusElement.style.backgroundColor = 'red';
             });
         }
@@ -106,12 +125,14 @@
         const plexUrl = 'https://plemby.ddns.net/plex/';
         const embyUrl = 'https://plemby.ddns.net/emby/';
 
-        // Trigger status checks for each service
-        updateStatus('Sonarr', sonarrUrl, 'sonarr-status');
-        updateStatus('qBittorrent', qbittorrentUrl, 'qbittorrent-status');
-        updateStatus('Prowlarr', prowlarrUrl, 'prowlarr-status');
-        updateStatus('Plex', plexUrl, 'plex-status');
-        updateStatus('Emby', embyUrl, 'emby-status');
+        // Trigger status checks for each service when the page loads
+        document.addEventListener("DOMContentLoaded", function() {
+            updateStatus('Sonarr', sonarrUrl, 'sonarr-status');
+            updateStatus('qBittorrent', qbittorrentUrl, 'qbittorrent-status');
+            updateStatus('Prowlarr', prowlarrUrl, 'prowlarr-status');
+            updateStatus('Plex', plexUrl, 'plex-status');
+            updateStatus('Emby', embyUrl, 'emby-status');
+        });
     </script>
 </body>
 </html>
