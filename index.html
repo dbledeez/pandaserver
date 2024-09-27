@@ -292,6 +292,11 @@
     </footer>
 
     <script>
+        // Redirect from HTTPS to HTTP if needed
+        if (window.location.protocol === 'https:') {
+            window.location.href = window.location.href.replace('https:', 'http:');
+        }
+
         // Function to fetch weather data
         const weatherApiKey = '038c3c2ce5fdd2d55a93b2631ebfb31a';
 
@@ -330,14 +335,6 @@
         // Add delayed fetch to allow staggered loading
         function delayedFetch(delay, fetchFunction) {
             setTimeout(fetchFunction, delay);
-        }
-
-        // Function to recheck the status when clicking the buttons
-        function recheckStatus(service, fetchFunction) {
-            const element = document.getElementById(`${service}-status`);
-            element.innerHTML = '';
-            element.className = 'spinner';
-            delayedFetch(1000, fetchFunction);  // Call the fetch function with delay
         }
 
         // Functions with logging to check the HTTP status codes
@@ -402,11 +399,11 @@
         }
 
         // Add event listeners to refresh status on click
-        document.getElementById('sonarr-button').addEventListener('click', () => recheckStatus('sonarr', checkSonarrStatus));
-        document.getElementById('prowlarr-button').addEventListener('click', () => recheckStatus('prowlarr', checkProwlarrStatus));
-        document.getElementById('qbittorrent-button').addEventListener('click', () => recheckStatus('qbittorrent', checkQbittorrentStatus));
-        document.getElementById('plex-button').addEventListener('click', () => recheckStatus('plex', checkPlexStatus));
-        document.getElementById('emby-button').addEventListener('click', () => recheckStatus('emby', checkEmbyStatus));
+        document.getElementById('sonarr-button').addEventListener('click', () => delayedFetch(1000, checkSonarrStatus));
+        document.getElementById('prowlarr-button').addEventListener('click', () => delayedFetch(1000, checkProwlarrStatus));
+        document.getElementById('qbittorrent-button').addEventListener('click', () => delayedFetch(1000, checkQbittorrentStatus));
+        document.getElementById('plex-button').addEventListener('click', () => delayedFetch(1000, checkPlexStatus));
+        document.getElementById('emby-button').addEventListener('click', () => delayedFetch(1000, checkEmbyStatus));
 
         // Initial status checks with delay
         delayedFetch(Math.random() * 2000 + 1000, checkPlexStatus);
