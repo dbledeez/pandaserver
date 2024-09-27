@@ -2,417 +2,116 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Panda Server Control Panel</title>
-    <!-- Font Awesome CDN -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> <!-- Font Awesome -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet"> <!-- Sleeker Font -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Status Dashboard</title>
     <style>
-        /* Sleek Modern Design with Gradients */
         body {
-            margin: 0;
-            font-family: 'Roboto', sans-serif;
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
-            color: #fff;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+            font-family: Arial, sans-serif;
+            background-color: #1a1a1a;
+            color: #ffffff;
         }
 
-        header {
+        h1 {
             text-align: center;
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.8);
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
         }
 
-        header h1 {
-            margin: 0;
-            font-size: 3rem;
-            background: linear-gradient(45deg, #ff8c00, #ffd700);
-            -webkit-background-clip: text;
-            color: transparent;
-            font-weight: 500;
-        }
-
-        .container {
+        .status-container {
+            margin-bottom: 20px;
             display: flex;
-            flex-direction: row;
-            flex: 1;
-        }
-
-        aside {
-            width: 250px;
-            background-color: rgba(0, 0, 0, 0.7);
-            padding: 20px;
-            box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.15);
-            flex-shrink: 0;
-        }
-
-        main {
-            flex: 1;
-            padding: 20px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            margin: 20px;
-        }
-
-        footer {
-            text-align: center;
-            padding: 10px;
-            background-color: rgba(0, 0, 0, 0.8);
-            color: #cccccc;
-        }
-
-        /* Weather Button */
-        .weather-button, .status-box {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            text-align: center;
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f); /* Gradient background */
-            border: none;
-            border-radius: 5px;
-            padding: 10px 15px;
-            color: white;
-            margin-bottom: 15px; /* Spacing between widgets */
-        }
-
-        .weather-info {
-            margin: 5px 0;
-            font-size: 0.85rem;
-        }
-
-        .weather-info p {
-            margin: 2px 0;
-        }
-
-        .weather-icon img {
-            width: 45px;
-            height: 45px;
-        }
-
-        /* Sleeker, Smaller Service Buttons with Icons */
-        .service-button {
-            display: flex;
-            align-items: center;
             justify-content: space-between;
-            background-color: #333;
-            color: white;
-            border: 1px solid #555;
-            border-radius: 5px;
-            padding: 8px 15px;
-            margin: 8px 0;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: background-color 0.3s ease;
-            width: 200px;
-            box-sizing: border-box;
-        }
-
-        /* Service Icons */
-        .service-button i {
-            margin-right: 10px;
-            font-size: 1.2rem;
-        }
-
-        .service-button .status-indicator {
-            width: 15px;
-            height: 15px;
-            border-radius: 50%;
-            margin-left: 10px;
-            display: flex;
             align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            color: white;
-        }
-
-        .status-up {
-            background-color: green;
-        }
-
-        .status-down {
-            background-color: red;
-        }
-
-        /* Fixed Spinner */
-        .spinner {
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-top: 2px solid white;
-            border-radius: 50%;
-            width: 12px;
-            height: 12px;
-            animation: spin 0.8s linear infinite;
-            margin-left: 10px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Links Grid */
-        .links-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 20px;
-        }
-
-        .link-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-decoration: none;
+            padding: 10px;
+            background: linear-gradient(135deg, #4b79a1, #283e51);
+            border-radius: 8px;
+            width: 300px;
+            margin-left: auto;
+            margin-right: auto;
             color: #fff;
-            transition: transform 0.2s ease-in-out;
         }
 
-        .link-item:hover {
-            transform: translateY(-5px);
-        }
-
-        .link-item i {
-            margin-bottom: 10px;
-        }
-
-        .link-item span {
-            margin-top: 5px;
-            font-size: 1em;
-        }
-
-        .link-item:hover i {
-            color: #1e90ff;
+        .status-indicator {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: gray;
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Panda Server Control Panel</h1>
-    </header>
-    <div class="container">
-        <aside>
-            <!-- Weather Widget -->
-            <div class="weather-button">
-                <h2>Weather in Portland, OR</h2>
-                <div class="weather-info">
-                    <div class="weather-icon">
-                        <img src="" id="weather-icon" alt="Weather Icon">
-                    </div>
-                    <p>Temperature: <span id="temp">--</span>&deg;F</p>
-                    <p>Feels like: <span id="feels_like">--</span>&deg;F</p>
-                    <p>High: <span id="temp_max">--</span>&deg;F</p>
-                    <p>Low: <span id="temp_min">--</span>&deg;F</p>
-                    <p>Condition: <span id="weather_desc">--</span></p>
-                </div>
-            </div>
+    <h1>Service Status Dashboard</h1>
 
-            <!-- Service Status Widget with Font Awesome Icons -->
-            <div class="status-box">
-                <h2>Service Status</h2>
-                <div class="service-button" id="sonarr-button">
-                    <i class="fas fa-tv"></i> <!-- Sonarr Icon -->
-                    Sonarr
-                    <span id="sonarr-status" class="spinner"></span>
-                </div>
-                <div class="service-button" id="prowlarr-button">
-                    <i class="fas fa-search"></i> <!-- Prowlarr Icon -->
-                    Prowlarr
-                    <span id="prowlarr-status" class="spinner"></span>
-                </div>
-                <div class="service-button" id="qbittorrent-button">
-                    <i class="fas fa-cloud-download-alt"></i> <!-- qBittorrent Icon -->
-                    qBittorrent
-                    <span id="qbittorrent-status" class="spinner"></span>
-                </div>
-                <div class="service-button" id="plex-button">
-                    <i class="fas fa-play-circle"></i> <!-- Plex Icon -->
-                    Plex
-                    <span id="plex-status" class="spinner"></span>
-                </div>
-                <div class="service-button" id="emby-button">
-                    <i class="fas fa-server"></i> <!-- Emby Icon -->
-                    Emby
-                    <span id="emby-status" class="spinner"></span>
-                </div>
-            </div>
-        </aside>
-        <main>
-            <!-- Links with icons -->
-            <div class="links-grid">
-                <a href="https://plex.tv" class="link-item" target="_blank">
-                    <i class="fas fa-film fa-3x"></i>
-                    <span>Plex</span>
-                </a>
-                <a href="https://emby.media" class="link-item" target="_blank">
-                    <i class="fas fa-film fa-3x"></i>
-                    <span>Emby</span>
-                </a>
-                <a href="https://www.youtube.com" class="link-item" target="_blank">
-                    <i class="fab fa-youtube fa-3x"></i>
-                    <span>YouTube</span>
-                </a>
-                <a href="https://www.google.com" class="link-item" target="_blank">
-                    <i class="fab fa-google fa-3x"></i>
-                    <span>Google</span>
-                </a>
-                <a href="https://www.reddit.com" class="link-item" target="_blank">
-                    <i class="fab fa-reddit fa-3x"></i>
-                    <span>Reddit</span>
-                </a>
-                <a href="https://store.steampowered.com" class="link-item" target="_blank">
-                    <i class="fab fa-steam fa-3x"></i>
-                    <span>Steam</span>
-                </a>
-                <a href="https://mail.google.com" class="link-item" target="_blank">
-                    <i class="fas fa-envelope fa-3x"></i>
-                    <span>Gmail</span>
-                </a>
-                <a href="https://www.microsoft.com" class="link-item" target="_blank">
-                    <i class="fab fa-microsoft fa-3x"></i>
-                    <span>Microsoft</span>
-                </a>
-                <a href="https://chat.openai.com" class="link-item" target="_blank">
-                    <i class="fas fa-robot fa-3x"></i>
-                    <span>ChatGPT</span>
-                </a>
-                <a href="https://maps.google.com" class="link-item" target="_blank">
-                    <i class="fas fa-map-marked-alt fa-3x"></i>
-                    <span>Google Maps</span>
-                </a>
-                <a href="https://beta.maps.apple.com" class="link-item" target="_blank">
-                    <i class="fas fa-map fa-3x"></i>
-                    <span>Apple Maps Beta</span>
-                </a>
-            </div>
-        </main>
+    <div class="status-container">
+        <span>Sonarr</span>
+        <span id="sonarr-status" class="status-indicator"></span>
     </div>
-    <footer>
-        <p>&copy; 2023 Panda Server Incorporated</p>
-    </footer>
+
+    <div class="status-container">
+        <span>qBittorrent</span>
+        <span id="qbittorrent-status" class="status-indicator"></span>
+    </div>
+
+    <div class="status-container">
+        <span>Prowlarr</span>
+        <span id="prowlarr-status" class="status-indicator"></span>
+    </div>
+
+    <div class="status-container">
+        <span>Plex</span>
+        <span id="plex-status" class="status-indicator"></span>
+    </div>
+
+    <div class="status-container">
+        <span>Emby</span>
+        <span id="emby-status" class="status-indicator"></span>
+    </div>
 
     <script>
-        // Redirect from HTTPS to HTTP if needed
-        if (window.location.protocol === 'https:') {
-            window.location.href = window.location.href.replace('https:', 'http:');
+        // Basic Authentication credentials
+        const username = 'YOUR_USERNAME';  // Replace with actual username
+        const password = 'YOUR_PASSWORD';  // Replace with actual password
+
+        // Function to update service status
+        function updateStatus(serviceName, url, statusElementId) {
+            // Perform a fetch request with Basic Authentication
+            fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Basic ' + btoa(username + ':' + password) // Base64 encoding for Basic Auth
+                }
+            })
+            .then(response => {
+                const statusElement = document.getElementById(statusElementId);
+                if (response.ok) {
+                    // If service is up, show green
+                    statusElement.style.backgroundColor = 'green';
+                } else {
+                    // If service is down or unreachable, show red
+                    statusElement.style.backgroundColor = 'red';
+                }
+            })
+            .catch(error => {
+                console.error(`Error checking ${serviceName} status:`, error);
+                const statusElement = document.getElementById(statusElementId);
+                // In case of any error, show red (service down)
+                statusElement.style.backgroundColor = 'red';
+            });
         }
 
-        // Function to fetch weather data
-        const weatherApiKey = '038c3c2ce5fdd2d55a93b2631ebfb31a';
+        // URLs through the NGINX reverse proxy
+        const sonarrUrl = 'https://plemby.ddns.net/sonarr/';
+        const qbittorrentUrl = 'https://plemby.ddns.net/qbittorrent/';
+        const prowlarrUrl = 'https://plemby.ddns.net/prowlarr/';
+        const plexUrl = 'https://plemby.ddns.net/plex/';
+        const embyUrl = 'https://plemby.ddns.net/emby/';
 
-        function fetchWeather() {
-            const city = 'Portland,US';
-            const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${weatherApiKey}&units=imperial`;
-
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('temp').textContent = Math.round(data.main.temp);
-                    document.getElementById('feels_like').textContent = Math.round(data.main.feels_like);
-                    document.getElementById('temp_max').textContent = Math.round(data.main.temp_max);
-                    document.getElementById('temp_min').textContent = Math.round(data.main.temp_min);
-                    document.getElementById('weather_desc').textContent = data.weather[0].description;
-
-                    const iconCode = data.weather[0].icon;
-                    const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
-                    document.getElementById('weather-icon').src = iconUrl;
-                })
-                .catch(error => {
-                    console.error('Error fetching weather data:', error);
-                });
-        }
-
-        // Function to set the status indicator based on success or failure
-        function setStatus(service, status) {
-            const element = document.getElementById(`${service}-status`);
-            element.className = status ? 'status-indicator status-up' : 'status-indicator status-down';
-            element.innerHTML = '';
-            if (status) {
-                element.innerHTML = '✓'; // Add checkmark if status is up
-            }
-        }
-
-        // Add delayed fetch to allow staggered loading
-        function delayedFetch(delay, fetchFunction) {
-            setTimeout(fetchFunction, delay);
-        }
-
-        // Functions with logging to check the HTTP status codes
-        function checkPlexStatus() {
-            fetch('http://plemby.ddns.net:8080/proxy?url=http://plemby.ddns.net:32400/web', { mode: 'cors' })
-                .then(response => {
-                    console.log(`Plex HTTP Status: ${response.status}`);  // Log HTTP status
-                    setStatus('plex', response.status >= 200 && response.status < 300); // Mark "up" only for 2xx codes
-                })
-                .catch(error => {
-                    console.error(`Error checking Plex: ${error}`);
-                    setStatus('plex', false);
-                });
-        }
-
-        function checkSonarrStatus() {
-            fetch('http://plemby.ddns.net:8080/proxy?url=http://plemby.ddns.net:8989', { mode: 'cors' })
-                .then(response => {
-                    console.log(`Sonarr HTTP Status: ${response.status}`);  // Log HTTP status
-                    setStatus('sonarr', response.status >= 200 && response.status < 300);
-                })
-                .catch(error => {
-                    console.error(`Error checking Sonarr: ${error}`);
-                    setStatus('sonarr', false);
-                });
-        }
-
-        function checkProwlarrStatus() {
-            fetch('http://plemby.ddns.net:8080/proxy?url=http://plemby.ddns.net:9696', { mode: 'cors' })
-                .then(response => {
-                    console.log(`Prowlarr HTTP Status: ${response.status}`);  // Log HTTP status
-                    setStatus('prowlarr', response.status >= 200 && response.status < 300);
-                })
-                .catch(error => {
-                    console.error(`Error checking Prowlarr: ${error}`);
-                    setStatus('prowlarr', false);
-                });
-        }
-
-        function checkQbittorrentStatus() {
-            fetch('http://plemby.ddns.net:8080/proxy?url=http://plemby.ddns.net:8900', { mode: 'cors' })
-                .then(response => {
-                    console.log(`qBittorrent HTTP Status: ${response.status}`);  // Log HTTP status
-                    setStatus('qbittorrent', response.status >= 200 && response.status < 300);
-                })
-                .catch(error => {
-                    console.error(`Error checking qBittorrent: ${error}`);
-                    setStatus('qbittorrent', false);
-                });
-        }
-
-        function checkEmbyStatus() {
-            fetch('http://plemby.ddns.net:8080/proxy?url=http://emby.pandaserver.org/', { mode: 'cors' })
-                .then(response => {
-                    console.log(`Emby HTTP Status: ${response.status}`);  // Log HTTP status
-                    setStatus('emby', response.status >= 200 && response.status < 300);
-                })
-                .catch(error => {
-                    console.error(`Error checking Emby: ${error}`);
-                    setStatus('emby', false);
-                });
-        }
-
-        // Add event listeners to refresh status on click
-        document.getElementById('sonarr-button').addEventListener('click', () => delayedFetch(1000, checkSonarrStatus));
-        document.getElementById('prowlarr-button').addEventListener('click', () => delayedFetch(1000, checkProwlarrStatus));
-        document.getElementById('qbittorrent-button').addEventListener('click', () => delayedFetch(1000, checkQbittorrentStatus));
-        document.getElementById('plex-button').addEventListener('click', () => delayedFetch(1000, checkPlexStatus));
-        document.getElementById('emby-button').addEventListener('click', () => delayedFetch(1000, checkEmbyStatus));
-
-        // Initial status checks with delay
-        delayedFetch(Math.random() * 2000 + 1000, checkPlexStatus);
-        delayedFetch(Math.random() * 2000 + 1000, checkSonarrStatus);
-        delayedFetch(Math.random() * 2000 + 1000, checkProwlarrStatus);
-        delayedFetch(Math.random() * 2000 + 1000, checkQbittorrentStatus);
-        delayedFetch(Math.random() * 2000 + 1000, checkEmbyStatus);
-        
-        fetchWeather();
+        // Trigger status checks for each service
+        updateStatus('Sonarr', sonarrUrl, 'sonarr-status');
+        updateStatus('qBittorrent', qbittorrentUrl, 'qbittorrent-status');
+        updateStatus('Prowlarr', prowlarrUrl, 'prowlarr-status');
+        updateStatus('Plex', plexUrl, 'plex-status');
+        updateStatus('Emby', embyUrl, 'emby-status');
     </script>
 </body>
 </html>
