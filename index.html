@@ -332,6 +332,14 @@
             setTimeout(fetchFunction, delay);
         }
 
+        // Function to recheck the status when clicking the buttons
+        function recheckStatus(service, fetchFunction) {
+            const element = document.getElementById(`${service}-status`);
+            element.innerHTML = '';
+            element.className = 'spinner';
+            delayedFetch(1000, fetchFunction);  // Call the fetch function with delay
+        }
+
         // Functions with logging to check the HTTP status codes
         function checkPlexStatus() {
             fetch('http://plemby.ddns.net:8080/proxy?url=http://plemby.ddns.net:32400/web', { mode: 'cors' })
@@ -394,11 +402,11 @@
         }
 
         // Add event listeners to refresh status on click
-        document.getElementById('sonarr-button').addEventListener('click', () => delayedFetch(1000, checkSonarrStatus));
-        document.getElementById('prowlarr-button').addEventListener('click', () => delayedFetch(1000, checkProwlarrStatus));
-        document.getElementById('qbittorrent-button').addEventListener('click', () => delayedFetch(1000, checkQbittorrentStatus));
-        document.getElementById('plex-button').addEventListener('click', () => delayedFetch(1000, checkPlexStatus));
-        document.getElementById('emby-button').addEventListener('click', () => delayedFetch(1000, checkEmbyStatus));
+        document.getElementById('sonarr-button').addEventListener('click', () => recheckStatus('sonarr', checkSonarrStatus));
+        document.getElementById('prowlarr-button').addEventListener('click', () => recheckStatus('prowlarr', checkProwlarrStatus));
+        document.getElementById('qbittorrent-button').addEventListener('click', () => recheckStatus('qbittorrent', checkQbittorrentStatus));
+        document.getElementById('plex-button').addEventListener('click', () => recheckStatus('plex', checkPlexStatus));
+        document.getElementById('emby-button').addEventListener('click', () => recheckStatus('emby', checkEmbyStatus));
 
         // Initial status checks with delay
         delayedFetch(Math.random() * 2000 + 1000, checkPlexStatus);
