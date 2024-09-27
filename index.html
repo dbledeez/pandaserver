@@ -336,9 +336,9 @@
             delayedFetch(Math.random() * 1000 + 1000, fetchFunction); // Delay between 1-2 seconds
         }
 
-        // Functions with your proxy address
+        // Functions with your proxy address using the IP and port
         function checkPlexStatus() {
-            fetch('http://plemby.ddns.net:8080/proxy?url=http://plemby.ddns.net:32400/web', { mode: 'cors' })
+            fetch('http://24.21.109.33:8080/proxy?url=http://24.21.109.33:32400/web', { mode: 'cors' })
                 .then(response => {
                     setStatus('plex', response.ok); // If the request succeeds, it's up
                 })
@@ -348,7 +348,7 @@
         }
 
         function checkSonarrStatus() {
-            fetch('http://plemby.ddns.net:8080/proxy?url=http://plemby.ddns.net:8989', { mode: 'cors' })
+            fetch('http://24.21.109.33:8080/proxy?url=http://24.21.109.33:8989', { mode: 'cors' })
                 .then(response => {
                     setStatus('sonarr', response.ok);
                 })
@@ -358,7 +358,7 @@
         }
 
         function checkProwlarrStatus() {
-            fetch('http://plemby.ddns.net:8080/proxy?url=http://plemby.ddns.net:9696', { mode: 'cors' })
+            fetch('http://24.21.109.33:8080/proxy?url=http://24.21.109.33:9696', { mode: 'cors' })
                 .then(response => {
                     setStatus('prowlarr', response.ok);
                 })
@@ -368,7 +368,7 @@
         }
 
         function checkQbittorrentStatus() {
-            fetch('http://plemby.ddns.net:8080/proxy?url=http://plemby.ddns.net:8900', { mode: 'cors' })
+            fetch('http://24.21.109.33:8080/proxy?url=http://24.21.109.33:8900', { mode: 'cors' })
                 .then(response => {
                     setStatus('qbittorrent', response.ok);
                 })
@@ -378,7 +378,7 @@
         }
 
         function checkEmbyStatus() {
-            fetch('http://plemby.ddns.net:8080/proxy?url=http://emby.pandaserver.org/', { mode: 'cors' })
+            fetch('http://24.21.109.33:8080/proxy?url=http://emby.pandaserver.org/', { mode: 'cors' })
                 .then(response => {
                     setStatus('emby', response.ok);
                 })
