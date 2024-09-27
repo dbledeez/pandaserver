@@ -327,6 +327,11 @@
             }
         }
 
+        // Add delayed fetch to allow staggered loading
+        function delayedFetch(delay, fetchFunction) {
+            setTimeout(fetchFunction, delay);
+        }
+
         // Functions with logging to check the HTTP status codes
         function checkPlexStatus() {
             fetch('http://plemby.ddns.net:8080/proxy?url=http://plemby.ddns.net:32400/web', { mode: 'cors' })
@@ -389,18 +394,20 @@
         }
 
         // Add event listeners to refresh status on click
-        document.getElementById('sonarr-button').addEventListener('click', () => recheckStatus('sonarr', checkSonarrStatus));
-        document.getElementById('prowlarr-button').addEventListener('click', () => recheckStatus('prowlarr', checkProwlarrStatus));
-        document.getElementById('qbittorrent-button').addEventListener('click', () => recheckStatus('qbittorrent', checkQbittorrentStatus));
-        document.getElementById('plex-button').addEventListener('click', () => recheckStatus('plex', checkPlexStatus));
-        document.getElementById('emby-button').addEventListener('click', () => recheckStatus('emby', checkEmbyStatus));
+        document.getElementById('sonarr-button').addEventListener('click', () => delayedFetch(1000, checkSonarrStatus));
+        document.getElementById('prowlarr-button').addEventListener('click', () => delayedFetch(1000, checkProwlarrStatus));
+        document.getElementById('qbittorrent-button').addEventListener('click', () => delayedFetch(1000, checkQbittorrentStatus));
+        document.getElementById('plex-button').addEventListener('click', () => delayedFetch(1000, checkPlexStatus));
+        document.getElementById('emby-button').addEventListener('click', () => delayedFetch(1000, checkEmbyStatus));
 
-        fetchWeather();
+        // Initial status checks with delay
         delayedFetch(Math.random() * 2000 + 1000, checkPlexStatus);
         delayedFetch(Math.random() * 2000 + 1000, checkSonarrStatus);
         delayedFetch(Math.random() * 2000 + 1000, checkProwlarrStatus);
         delayedFetch(Math.random() * 2000 + 1000, checkQbittorrentStatus);
         delayedFetch(Math.random() * 2000 + 1000, checkEmbyStatus);
+        
+        fetchWeather();
     </script>
 </body>
 </html>
